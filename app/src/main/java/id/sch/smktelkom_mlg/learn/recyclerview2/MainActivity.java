@@ -2,13 +2,10 @@ package id.sch.smktelkom_mlg.learn.recyclerview2;
 
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new HotelAdapter(mlist);
         recyclerView.setAdapter(mAdapter);
@@ -43,14 +40,9 @@ public class MainActivity extends AppCompatActivity {
         TypedArray a = resources.obtainTypedArray(R.array.places_picture);
         Drawable[] arFoto = new Drawable[a.length()];
         for (int i = 0; i < arFoto.length; i++) {
-            BitmapDrawable bd = (BitmapDrawable) a.getDrawable(i);
-            RoundedBitmapDrawable rbd =
-                    RoundedBitmapDrawableFactory.create(getResources(), bd.getBitmap());
-            rbd.setCircular(true);
-            arFoto[i] = rbd;
+            arFoto[i] = a.getDrawable(i);
         }
         a.recycle();
-
         for (int i = 0; i < arJudul.length; i++) {
             mlist.add(new Hotel(arJudul[i], arDeskripsi[i], arFoto[i]));
         }
@@ -87,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         public void onBindViewHolder(ViewHolder holder, int position) {
             Hotel hotel = hotelList.get(position);
             holder.tvJudul.setText(hotel.judul);
-            holder.tvDeskripsi.setText(hotel.deskripsi);
             holder.ivFoto.setImageDrawable(hotel.foto);
         }
 
@@ -101,13 +92,11 @@ public class MainActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             ImageView ivFoto;
             TextView tvJudul;
-            TextView tvDeskripsi;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 ivFoto = (ImageView) itemView.findViewById(R.id.imageView);
                 tvJudul = (TextView) itemView.findViewById(R.id.textViewJudul);
-                tvDeskripsi = (TextView) itemView.findViewById(R.id.textViewDeskripsi);
             }
         }
     }
